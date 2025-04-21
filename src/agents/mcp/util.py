@@ -398,10 +398,14 @@ class MCPUtil:
                 f"Invalid JSON input for tool {tool.name}: expected a JSON object"
             )
 
+        # NOT GOOD: 
+        # https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/234
+        # adding the context as one more field in the input to tool, since dynamic context is not supported by mcp.
+        json_data["juspay_meta_info"] = context.context
         if _debug.DONT_LOG_TOOL_DATA:
             logger.debug(f"Invoking MCP tool {tool.name}")
         else:
-            logger.debug(f"Invoking MCP tool {tool.name} with input {input_json}")
+            logger.debug(f"Invoking Juspay MCP tool {tool.name} with input {json_data}")
 
         try:
             resolved_meta = await cls._resolve_meta(server, context, tool.name, json_data)
